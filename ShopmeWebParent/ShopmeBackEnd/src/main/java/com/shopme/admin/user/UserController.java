@@ -26,6 +26,8 @@ public class UserController {
 		return "users";
 	}
 	
+	
+	
 	@GetMapping("/users/new")
 	public String newUser(Model model) {
 		List<Role> listRoles = service.listRoles();
@@ -48,6 +50,8 @@ public class UserController {
 		return "redirect:/users";
 	}
 	
+	
+	
 	@GetMapping("/users/edit/{id}")
 	public String editUser(@PathVariable(name = "id") Integer id, Model model, RedirectAttributes redirectAttributes) {
 		
@@ -66,6 +70,9 @@ public class UserController {
 		}
 		
 		
+		
+		
+		
 	}
 	@GetMapping("/users/delete/{id}")
 	public String deleteUser(@PathVariable(name = "id") Integer id, Model model, RedirectAttributes redirectAttributes) {
@@ -77,6 +84,17 @@ public class UserController {
 		} catch(UserNotFoundException ex) {
 			redirectAttributes.addFlashAttribute("message", ex.getMessage());	
 		}
+		return "redirect:/users";
+	}
+	
+	
+	@GetMapping("/users/{id}/enabled/{status}")
+	public String updateUserEnabledStatus(@PathVariable("id") Integer id, 
+				@PathVariable("status") boolean enabled, RedirectAttributes redirectAttributes) {
+		service.updateUserEnabledStatus(id, enabled);
+		String status = enabled ? "enabled" : "disabled";
+		String message = "The user ID " + id + " has been " + status;
+		redirectAttributes.addFlashAttribute("message", message);
 		return "redirect:/users";
 	}
 }
